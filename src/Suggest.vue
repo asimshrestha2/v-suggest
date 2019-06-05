@@ -18,7 +18,7 @@
                     @click="selectItem(row)"
                     @mouseenter="highlight = index"
                     @mouseleave="highlight = -1"
-                    v-html="getRow(row)" ></li>
+                    v-html="showRow(row)" ></li>
             </ul>
         </v-drop-down>
     </div>
@@ -33,6 +33,7 @@
             data: Array,
             value: String,
             name:String,
+            renderField: Function,
             keyField: {
                 type: String,
                 default: 'id'
@@ -84,6 +85,10 @@
             getRow(row){
                 if(typeof this.showField === 'string') return row[this.showField];
                 else if(typeof this.showField === 'function') return this.showField(row);
+            },
+            showRow(row){
+                if(this.renderField && typeof this.renderField === "function") return this.renderField(row);
+                else return this.getRow(row)
             },
             showChange(val){
                 this.dropShow = val;
